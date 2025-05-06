@@ -1,95 +1,348 @@
+// import Image from "next/image";
+// import styles from "./page.module.css";
+
+// export default function Home() {
+//   return (
+//     <div className={styles.page}>
+//       <main className={styles.main}>
+//         <Image
+//           className={styles.logo}
+//           src="/next.svg"
+//           alt="Next.js logo"
+//           width={180}
+//           height={38}
+//           priority
+//         />
+//         <ol>
+//           <li>
+//             Get started by editing <code>src/app/page.tsx</code>.
+//           </li>
+//           <li>Save and see your changes instantly.</li>
+//         </ol>
+
+//         <div className={styles.ctas}>
+//           <a
+//             className={styles.primary}
+//             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+//             target="_blank"
+//             rel="noopener noreferrer"
+//           >
+//             <Image
+//               className={styles.logo}
+//               src="/vercel.svg"
+//               alt="Vercel logomark"
+//               width={20}
+//               height={20}
+//             />
+//             Deploy now
+//           </a>
+//           <a
+//             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className={styles.secondary}
+//           >
+//             Read our docs
+//           </a>
+//         </div>
+//       </main>
+//       <footer className={styles.footer}>
+//         <a
+//           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           <Image
+//             aria-hidden
+//             src="/file.svg"
+//             alt="File icon"
+//             width={16}
+//             height={16}
+//           />
+//           Learn
+//         </a>
+//         <a
+//           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           <Image
+//             aria-hidden
+//             src="/window.svg"
+//             alt="Window icon"
+//             width={16}
+//             height={16}
+//           />
+//           Examples
+//         </a>
+//         <a
+//           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           <Image
+//             aria-hidden
+//             src="/globe.svg"
+//             alt="Globe icon"
+//             width={16}
+//             height={16}
+//           />
+//           Go to nextjs.org →
+//         </a>
+//       </footer>
+//     </div>
+//   );
+// }
+
+"use client";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import styles from "./page.module.css";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+// interface Event {
+//   id: number;
+//   title: string;
+//   date: string;
+//   location: string;
+//   category: string;
+//   attendees: number;
+// }
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+const EventHub = () => {
+  // Sample event data
+  const events = [
+    {
+      id: 1,
+      title: "Tech Conference 2023",
+      date: "June 15-17, 2023",
+      location: "San Francisco Convention Center",
+      category: "Technology",
+      attendees: 1500,
+    },
+    {
+      id: 2,
+      title: "Music Festival Weekend",
+      date: "July 8-10, 2023",
+      location: "Golden Gate Park",
+      category: "Music",
+      attendees: 5000,
+    },
+    {
+      id: 3,
+      title: "Food & Wine Expo",
+      date: "August 25-27, 2023",
+      location: "Marina District",
+      category: "Food",
+      attendees: 2200,
+    },
+  ];
+  const categories = ["All", "Technology", "Music", "Food", "Business", "Arts"];
+  const [filteredCategory, setFilteredCategory] = useState<string | null>(null);
+
+  const handleFilterChange = (category: string | null) => {
+    setFilteredCategory(category);
+  };
+
+  const filteredEvents = filteredCategory
+    ? events.filter((event) => event.category === filteredCategory)
+    : events;
+
+  return (
+    <div className={styles.eventHub}>
+      {/* Header & Navbar */}
+      <header className={styles.header}>
+        <div className={styles.navbar}>
+          <div className={styles.logo}>EventHub</div>
+          <nav className={styles.navigation}>
+            <Link href="/" className={styles.navLink}>
+              Home
+            </Link>
+            <Link href="/events" className={styles.navLink}>
+              Events
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
+            </Link>
+            <Link href={"/Auth/Login"} className={styles.loginButton}>
+              Login
+            </Link>
+          </nav>
         </div>
-      </main>
+
+        <div className={styles.hero}>
+          <div className={styles.heroContent}>
+            <h1 className={styles.heroTitle}>
+              Discover. Create.{" "}
+              <span className={styles.highlight}>Celebrate.</span>
+            </h1>
+            <p className={styles.heroSubtitle}>
+              Manage and attend events with ease, from anywhere in the world.
+            </p>
+            <div className={styles.heroButtons}>
+              <Link href="/events" className={styles.primaryButton}>
+                Browse Events
+              </Link>
+              <Link href="/create" className={styles.secondaryButton}>
+                Create Event
+              </Link>
+            </div>
+          </div>
+          <div className={styles.heroImage}>
+            <Image
+              src="/images/pic3.png"
+              alt="People at event"
+              width={600}
+              height={400}
+              priority
+            />
+          </div>
+        </div>
+      </header>
+      {/* Events Section */}
+      <section className={styles.eventsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Upcoming Events</h2>
+          <p className={styles.sectionDescription}>
+            Discover the hottest events happening near you. From tech
+            conferences to music festivals, find something exciting for
+            everyone.
+          </p>
+        </div>
+
+        <div className={styles.filterContainer}>
+          <h3 className={styles.filterHeading}>Filter by Category</h3>
+          <div className={styles.categoryButtons}>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() =>
+                  handleFilterChange(category === "All" ? null : category)
+                }
+                className={`${styles.categoryButton} ${
+                  (category === "All" && !filteredCategory) ||
+                  category === filteredCategory
+                    ? styles.activeCategory
+                    : ""
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={styles.eventGrid}>
+          {filteredEvents.map((event) => (
+            <div key={event.id} className={styles.eventCard}>
+              <div className={styles.eventImageContainer}>
+                <Image
+                  src={`/images/pic2.png`}
+                  alt={event.title}
+                  className={styles.eventImage}
+                  width={400}
+                  height={250}
+                  objectFit="cover"
+                />
+                <span className={styles.eventBadge}>{event.category}</span>
+              </div>
+
+              <div className={styles.eventContent}>
+                <h3 className={styles.eventTitle}>{event.title}</h3>
+
+                <div className={styles.eventInfo}>
+                  <div className={styles.eventInfoItem}>
+                    <span className={styles.eventInfoIcon}>📅</span>
+                    <span>{event.date}</span>
+                  </div>
+
+                  <div className={styles.eventInfoItem}>
+                    <span className={styles.eventInfoIcon}>📍</span>
+                    <span>{event.location}</span>
+                  </div>
+
+                  <div className={styles.eventInfoItem}>
+                    <span className={styles.eventInfoIcon}>👥</span>
+                    <span>{event.attendees} attending</span>
+                  </div>
+                </div>
+
+                <Link
+                  href={`/events/${event.id}`}
+                  className={styles.eventButton}
+                >
+                  Get Tickets
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.viewAllContainer}>
+          <Link href="/events" className={styles.viewAllButton}>
+            View All Events
+          </Link>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className={styles.statsSection}>
+        <div className={styles.statsContainer}>
+          <div className={styles.statItem}>
+            <div className={styles.statValue}>500+</div>
+            <div className={styles.statLabel}>Events Monthly</div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.statValue}>20k+</div>
+            <div className={styles.statLabel}>Active Users</div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.statValue}>100+</div>
+            <div className={styles.statLabel}>Cities Covered</div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.statValue}>98%</div>
+            <div className={styles.statLabel}>Satisfaction Rate</div>
+          </div>
+        </div>
+      </section>
+      {/* CTA Section */}
+      <section className={styles.ctaSection}>
+        <h2 className={styles.ctaTitle}>Ready to Get Started?</h2>
+        <p className={styles.ctaDescription}>
+          Join thousands of event organizers and attendees on our platform.
+        </p>
+        <div className={styles.ctaButtons}>
+          <Link href="/register" className={styles.ctaPrimaryButton}>
+            Sign Up Free
+          </Link>
+          <Link href="/contact" className={styles.ctaSecondaryButton}>
+            Contact Sales
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
       <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLogo}>EventHub</div>
+          <p className={styles.footerCopyright}>
+            &copy; {new Date().getFullYear()} EventHub. All rights reserved.
+          </p>
+          <div className={styles.footerLinks}>
+            <Link href="/terms" className={styles.footerLink}>
+              Terms
+            </Link>
+            <Link href="/privacy" className={styles.footerLink}>
+              Privacy
+            </Link>
+            <Link href="/contact" className={styles.footerLink}>
+              Contact
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default EventHub;
