@@ -4,13 +4,21 @@ import { createContext } from "react";
 
 export interface IAttendee {
   id?: number;
-  userName: string;
+  username: string;
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  roles?: IAttendeeRole[];
+}
+
+export interface IUser {
+  username: string;
   name: string;
   surname: string;
   emailAddress: string;
   password: string;
-  phoneNumber: string;
-  roles?: IAttendeeRole[];
 }
 
 export interface ILoginData {
@@ -27,14 +35,14 @@ export interface IAttendeeStateContext {
   isPending: boolean;
   isSuccess: boolean;
   isError: boolean;
-  currentAttendee?: IAttendee;
+  CurrentUser?: IUser;
   jwtToken?: string;
   currentRole?: string;
 }
 
 export interface IAttendeeActionContext {
   loginAttendee: (loginData: ILoginData) => Promise<void>;
-  getCurrentAttendee: (jwtToken: string) => Promise<void>;
+  getCurrentUser: (jwtToken: string) => Promise<void>;
   createAttendee: (attendee: IAttendee) => Promise<void>;
   signOut: () => void;
   resetStateFlags: () => void;
@@ -45,7 +53,7 @@ export const INITIAL_STATE: IAttendeeStateContext = {
   isPending: false,
   isSuccess: false,
   isError: false,
-  currentAttendee: undefined,
+  CurrentUser: undefined,
 };
 
 export const AttendeeStateContext =
@@ -53,7 +61,7 @@ export const AttendeeStateContext =
 
 export const AttendeeActionContext = createContext<IAttendeeActionContext>({
   loginAttendee: async () => {},
-  getCurrentAttendee: async () => {},
+  getCurrentUser: async () => {},
   createAttendee: async () => {},
   signOut: () => {},
   resetStateFlags: () => {},

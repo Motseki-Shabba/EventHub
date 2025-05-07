@@ -28,7 +28,7 @@ const AttendeeLoginForm: React.FC = () => {
   // Handle successful login
   useEffect(() => {
     if (isSuccess) {
-      router.push("/dashboard");
+      router.push("/AttendeeManager/Dashboard");
       resetStateFlags(); // Reset state after navigation
     }
   }, [isSuccess, router]);

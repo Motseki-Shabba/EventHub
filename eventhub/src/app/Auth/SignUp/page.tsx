@@ -1,25 +1,27 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader, UserPlus } from "lucide-react";
 import styles from "./Styles/RegistrationForm.module.css";
+import { useAttendeeActions, useAttendeeState } from "@/Providers/Auth";
 
 interface FormData {
-  userName: string;
+  username: string;
   name: string;
   surname: string;
-  emailAddress: string;
+  email: string;
   password: string;
   confirmPassword: string;
   phoneNumber: string;
 }
 
 interface FormErrors {
-  userName?: string;
+  username?: string;
   name?: string;
   surname?: string;
-  emailAddress?: string;
+  email?: string;
   password?: string;
   confirmPassword?: string;
   phoneNumber?: string;
@@ -27,11 +29,15 @@ interface FormErrors {
 }
 
 const AttendeeRegistrationForm: React.FC = () => {
+  const router = useRouter();
+  const { createAttendee, resetStateFlags } = useAttendeeActions();
+  const { isPending, isSuccess, isError } = useAttendeeState();
+
   const [formData, setFormData] = useState<FormData>({
-    userName: "",
+    username: "",
     name: "",
     surname: "",
-    emailAddress: "",
+    email: "",
     password: "",
     confirmPassword: "",
     phoneNumber: "",
@@ -39,9 +45,23 @@ const AttendeeRegistrationForm: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isPending, setIsPending] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+
+  // Clear state flags when component unmounts
+  useEffect(() => {
+    return () => {
+      resetStateFlags();
+    };
+  }, []);
+
+  // Handle redirection after successful registration
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        router.push("/login?registered=success");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, router]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,11 +86,11 @@ const AttendeeRegistrationForm: React.FC = () => {
     let isValid = true;
 
     // Username validation
-    if (!formData.userName.trim()) {
-      newErrors.userName = "Username is required";
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
       isValid = false;
-    } else if (formData.userName.length < 3) {
-      newErrors.userName = "Username must be at least 3 characters";
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
       isValid = false;
     }
 
@@ -88,11 +108,11 @@ const AttendeeRegistrationForm: React.FC = () => {
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.emailAddress.trim()) {
-      newErrors.emailAddress = "Email is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
       isValid = false;
-    } else if (!emailRegex.test(formData.emailAddress)) {
-      newErrors.emailAddress = "Please enter a valid email address";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
       isValid = false;
     }
 
@@ -141,26 +161,21 @@ const AttendeeRegistrationForm: React.FC = () => {
     }
 
     try {
-      setIsPending(true);
-      setIsError(false);
+      const attendeeData = {
+        username: formData.username,
+        name: formData.name,
+        surname: formData.surname,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+      };
 
-      // In a real implementation, this would call your registration service
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulating API call
-
-      setIsSuccess(true);
-
-      // Redirect after success - simulating this with a timeout
-      setTimeout(() => {
-        window.location.href = "/login?registered=success";
-      }, 1500);
+      await createAttendee(attendeeData);
     } catch {
-      setIsError(true);
       setErrors({
         ...errors,
         general: "Registration failed. Please try again.",
       });
-    } finally {
-      setIsPending(false);
     }
   };
 
@@ -200,26 +215,26 @@ const AttendeeRegistrationForm: React.FC = () => {
               )}
 
               <div className={styles.gridCols2}>
-                {/* Username */}
+                {/* username */}
                 <div className={styles.formGroup}>
-                  <label htmlFor="userName" className={styles.label}>
+                  <label htmlFor="username" className={styles.label}>
                     Username *
                   </label>
                   <div className={styles.inputWrapper}>
                     <input
-                      id="userName"
-                      name="userName"
+                      id="username"
+                      name="username"
                       type="text"
                       autoComplete="username"
                       required
-                      value={formData.userName}
+                      value={formData.username}
                       onChange={handleChange}
                       className={`${styles.input} ${
-                        errors.userName ? styles.inputError : ""
+                        errors.username ? styles.inputError : ""
                       }`}
                     />
-                    {errors.userName && (
-                      <p className={styles.errorText}>{errors.userName}</p>
+                    {errors.username && (
+                      <p className={styles.errorText}>{errors.username}</p>
                     )}
                   </div>
                 </div>
@@ -299,24 +314,24 @@ const AttendeeRegistrationForm: React.FC = () => {
 
               {/* Email */}
               <div className={styles.formGroup}>
-                <label htmlFor="emailAddress" className={styles.label}>
+                <label htmlFor="email" className={styles.label}>
                   Email address *
                 </label>
                 <div className={styles.inputWrapper}>
                   <input
-                    id="emailAddress"
-                    name="emailAddress"
+                    id="email"
+                    name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    value={formData.emailAddress}
+                    value={formData.email}
                     onChange={handleChange}
                     className={`${styles.input} ${
-                      errors.emailAddress ? styles.inputError : ""
+                      errors.email ? styles.inputError : ""
                     }`}
                   />
-                  {errors.emailAddress && (
-                    <p className={styles.errorText}>{errors.emailAddress}</p>
+                  {errors.email && (
+                    <p className={styles.errorText}>{errors.email}</p>
                   )}
                 </div>
               </div>
@@ -408,7 +423,7 @@ const AttendeeRegistrationForm: React.FC = () => {
 
             <p className={styles.loginPrompt}>
               Already have an account?{" "}
-              <Link href={"/Auth/Login"} className={styles.loginLink}>
+              <Link href="/login" className={styles.loginLink}>
                 Sign in
               </Link>
             </p>

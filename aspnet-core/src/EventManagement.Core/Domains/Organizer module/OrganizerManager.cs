@@ -18,6 +18,8 @@
             private readonly IRepository<Organizer, Guid> _organizerRepository;
             private readonly IRepository<Event, Guid> _eventRepository;
 
+
+
             public OrganizerManager(
                 UserManager userManager,
                 IRepository<Organizer, Guid> organizerRepository,
@@ -38,7 +40,8 @@
                 string profileImageUrl,
                 string contactInfo,
                 string nationalIdNumber,
-                string address)
+                string address,
+                string EventHubAdmin)
             {
                 var user = new User
                 {
@@ -56,7 +59,18 @@
                         string.Join(", ", userCreationResult.Errors.Select(e => e.Description)));
                 }
 
-                await _userManager.AddToRoleAsync(user, "Organizer");
+                if(EventHubAdmin == "EventHubAdmin")
+                {
+                    await _userManager.AddToRoleAsync(user, "EventHubAdmin");
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Organizer");
+                }
+               
+               
+
+
 
                 var organizer = new Organizer
                 {

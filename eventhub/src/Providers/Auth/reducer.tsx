@@ -32,6 +32,20 @@ export const AttendeeReducer = handleActions<IAttendeeStateContext>(
       ...action.payload,
     }),
 
+    // Handling get current user actions
+    [AttendeeActionEnums.getCurrentUserPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [AttendeeActionEnums.getCurrentUserSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [AttendeeActionEnums.getCurrentUserError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
     // Handling create attendee actions
     [AttendeeActionEnums.createAttendeePending]: (state, action) => ({
       ...state,

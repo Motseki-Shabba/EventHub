@@ -1,29 +1,30 @@
 "use client";
-import { useContext, useEffect, useReducer } from "react";
 import { AttendeeReducer } from "@/Providers/Auth/reducer";
+import { getAxiosInstace } from "@/Utils/axios-instance";
+import { getRole } from "@/Utils/jwtDecoder";
+import { useContext, useEffect, useReducer } from "react";
 import {
-  AttendeeActionContext,
-  AttendeeStateContext,
-  ILoginData,
-  INITIAL_STATE,
-  IAttendee,
-} from "./context";
-import {
-  getCurrentAttendeeError,
-  getCurrentAttendeePending,
-  getCurrentAttendeeSuccess,
+  createAttendeeError,
+  createAttendeePending,
+  createAttendeeSuccess,
+  getCurrentUserError,
+  getCurrentUserPending,
+  getCurrentUserSuccess,
   loginAttendeeError,
   loginAttendeePending,
   loginAttendeeSuccess,
   resetStateFlagsAction,
   signOutAttendee,
-  createAttendeeError,
-  createAttendeePending,
-  createAttendeeSuccess,
   updateRoleAction,
 } from "./actions";
-import { getAxiosInstace } from "@/Utils/axios-instance";
-import { getRole } from "@/Utils/jwtDecoder";
+import {
+  AttendeeActionContext,
+  AttendeeStateContext,
+  IAttendee,
+  ILoginData,
+  INITIAL_STATE,
+  IUser,
+} from "./context";
 
 export const AttendeeProvider = ({
   children,
@@ -37,8 +38,9 @@ export const AttendeeProvider = ({
     const token = sessionStorage.getItem("accessToken");
     if (token) {
       const role = getRole(token);
+      debugger;
       updateRole(role);
-      getCurrentAttendee(token);
+      getCurrentUser(token);
       dispatch(loginAttendeeSuccess(token));
     }
   }, []);
@@ -51,11 +53,14 @@ export const AttendeeProvider = ({
 
     await instance
       .post(endpoint, loginData)
+
       .then((response) => {
         sessionStorage.setItem("accessToken", response.data.result.accessToken);
+        debugger;
         const role = getRole(response.data.result.accessToken);
         updateRole(role);
-        getCurrentAttendee(response.data.result.accessToken);
+
+        getCurrentUser(response.data.result.accessToken);
         dispatch(loginAttendeeSuccess(response.data.result.accessToken));
       })
       .catch((error) => {
@@ -64,8 +69,9 @@ export const AttendeeProvider = ({
       });
   };
 
-  const getCurrentAttendee = async (jwtToken: string) => {
-    dispatch(getCurrentAttendeePending());
+  const getCurrentUser = async (jwtToken: string) => {
+    debugger;
+    dispatch(getCurrentUserPending());
     const endpoint = `/api/services/app/Session/GetCurrentLoginInformations`;
     await instance
       .get(endpoint, {
@@ -74,14 +80,16 @@ export const AttendeeProvider = ({
         },
       })
       .then((response) => {
+        debugger;
         if (response.status === 200 && response.data) {
-          const currentAttendee: IAttendee = response.data.result.user;
-          dispatch(getCurrentAttendeeSuccess(currentAttendee));
+          const CurrentUser: IUser = response.data.result.user;
+          dispatch(getCurrentUserSuccess(CurrentUser));
         }
       })
       .catch((error) => {
+        debugger;
         console.error(error);
-        dispatch(getCurrentAttendeeError());
+        dispatch(getCurrentUserError());
       });
   };
 
@@ -99,6 +107,7 @@ export const AttendeeProvider = ({
       .catch((error) => {
         console.error(error);
         const backendMessage = error.response?.data?.error?.message;
+
         dispatch(createAttendeeError());
         throw new Error(backendMessage);
       });
@@ -122,7 +131,7 @@ export const AttendeeProvider = ({
       <AttendeeActionContext.Provider
         value={{
           loginAttendee,
-          getCurrentAttendee,
+          getCurrentUser,
           createAttendee,
           signOut,
           resetStateFlags,
