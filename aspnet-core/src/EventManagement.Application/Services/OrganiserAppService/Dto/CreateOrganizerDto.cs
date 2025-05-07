@@ -40,6 +40,7 @@ namespace EventManagement.Services.OrganiserAppService.Dto
         [Required]
         [StringLength(13, ErrorMessage = "Please make sure National ID Number is 13 digits")]
         public string NationalIdNumber { get; set; }
+        public string EventHubAdmin { get; set; } = "Organizer";
 
         [Required]
         public string Address { get; set; }

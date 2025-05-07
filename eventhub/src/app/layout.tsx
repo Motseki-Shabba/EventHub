@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AttendeeProvider } from "@/Providers/Auth";
+import { ConfigProvider } from "antd";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +26,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AttendeeProvider>{children}</AttendeeProvider>
-      </body>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#734cab",
+            colorInfo: "#734cab",
+          },
+        }}
+      >
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <AttendeeProvider>{children}</AttendeeProvider>
+        </body>
+      </ConfigProvider>
     </html>
   );
 }

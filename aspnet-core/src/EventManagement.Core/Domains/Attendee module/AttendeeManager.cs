@@ -47,7 +47,9 @@ namespace EventManagement.Domains.Attendee_module
                 throw new UserFriendlyException("Failed to create user: " + result.Errors.JoinAsString(", "));
             }
 
+
             await _userManager.AddToRoleAsync(user, "ATTENDEE");
+            
 
             var attendee = new Attendee
             {

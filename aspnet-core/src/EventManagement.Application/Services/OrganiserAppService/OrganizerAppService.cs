@@ -67,7 +67,8 @@ namespace EventManagement.Services.OrganiserAppService
                 input.ProfileImageUrl,
                 input.ContactInfo,
                 input.NationalIdNumber,
-                input.Address
+                input.Address,
+                input.EventHubAdmin
             );
 
             await SendOrganizerCredentialsEmail(

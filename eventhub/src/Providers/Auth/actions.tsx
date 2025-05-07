@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-import { IAttendee, IAttendeeStateContext } from "./context";
+import { IAttendee, IAttendeeStateContext, IUser } from "./context";
 
 export enum AttendeeActionEnums {
   loginAttendeePending = "LOGIN_ATTENDEE_PENDING",
@@ -9,6 +9,10 @@ export enum AttendeeActionEnums {
   getCurrentAttendeePending = "GET_CURRENT_ATTENDEE_PENDING",
   getCurrentAttendeeSuccess = "GET_CURRENT_ATTENDEE_SUCCESS",
   getCurrentAttendeeError = "GET_CURRENT_ATTENDEE_ERROR",
+
+  getCurrentUserPending = "GET_CURRENT_USER_PENDING",
+  getCurrentUserSuccess = "GET_CURRENT_USER_SUCCESS",
+  getCurrentUserError = "GET_CURRENT_USER_ERROR",
 
   createAttendeePending = "CREATE_ATTENDEE_PENDING",
   createAttendeeSuccess = "CREATE_ATTENDEE_SUCCESS",
@@ -55,6 +59,26 @@ export const getCurrentAttendeeSuccess = createAction<
 );
 export const getCurrentAttendeeError = createAction<IAttendeeStateContext>(
   AttendeeActionEnums.getCurrentAttendeeError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+export const getCurrentUserPending = createAction<IAttendeeStateContext>(
+  AttendeeActionEnums.getCurrentUserPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getCurrentUserSuccess = createAction<IAttendeeStateContext, IUser>(
+  AttendeeActionEnums.getCurrentUserSuccess,
+  (CurrentUser: IUser) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    CurrentUser,
+  })
+);
+
+export const getCurrentUserError = createAction<IAttendeeStateContext>(
+  AttendeeActionEnums.getCurrentUserError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 

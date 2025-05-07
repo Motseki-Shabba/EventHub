@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/redux-actions": "^2.6.5",
+    "antd": "^5.24.9",
     "axios": "^1.9.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.507.0",
