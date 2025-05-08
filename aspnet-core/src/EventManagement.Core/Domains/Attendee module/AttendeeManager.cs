@@ -15,11 +15,14 @@ namespace EventManagement.Domains.Attendee_module
     {
         private readonly UserManager _userManager;
         private readonly IRepository<Attendee, Guid> _attendeeRepository;
-
+       
+      
         public AttendeeManager(UserManager userManager, IRepository<Attendee, Guid> attendeeRepository)
         {
             _userManager = userManager;
             _attendeeRepository = attendeeRepository;
+           
+            
         }
 
         public async Task<Attendee> CreateAsync(
@@ -63,5 +66,9 @@ namespace EventManagement.Domains.Attendee_module
            var results = await _attendeeRepository.InsertAsync(attendee);
             return results;
         }
+
+       
+
+
     }
 }

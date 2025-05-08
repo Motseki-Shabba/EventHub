@@ -1,39 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using EventManagement.Domains;
 
 namespace EventManagement.Services.EventAppService.DTO
 {
-
     [AutoMapTo(typeof(Ticket))]
-    public class CreateTicketDto
+    public class UpdateTicketDto : EntityDto<Guid>
     {
-        [Required]
         public string Name { get; set; }
-
         public string Description { get; set; }
-
-        [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }
-
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
         public int Quantity { get; set; }
-
+        public int RemainingQuantity { get; set; }
         public TicketType Type { get; set; }
+        public Guid EventId { get; set; }
     }
+   
 }
-
-public enum TicketType
-{
-    General = 0,
-    VIP = 1,
-    EarlyBird = 2
-}
-

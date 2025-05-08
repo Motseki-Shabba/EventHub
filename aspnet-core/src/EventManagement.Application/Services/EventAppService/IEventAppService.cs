@@ -14,7 +14,13 @@ namespace EventManagement.Services.EventAppService
     {
         Task<List<EventDto>> GetEventsByOrganizerIdAsync(Guid organizerId);
         Task<EventDto> CreateEvent(CreateEventDto input);
-        //Task<EventDto> UpdateEvent(EventDto input);
+        Task<EventDto> UpdateEvent(UpdateEventDto input);
+
+      
+
+        Task<List<EventDto>> GetAllEventsWithTicketsAsync();
+
+        Task<List<EventDto>> GetAllEventsAsync();
     }
 
 }

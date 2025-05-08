@@ -24,5 +24,10 @@ namespace EventManagement.Domains
       
         // Navigation properties
         public virtual ICollection<Event> Events { get; set; } = new List<Event>();
+
+        public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+
+
     }
 }

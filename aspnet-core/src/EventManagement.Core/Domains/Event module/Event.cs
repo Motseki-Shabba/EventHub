@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Entities.Auditing;
+using EventManagement.Domains.Attendee_module;
 
 namespace EventManagement.Domains
 {
@@ -18,6 +19,8 @@ namespace EventManagement.Domains
         // Navigation properties
         public virtual ICollection<Organizer> Organizers { get; set; } = new List<Organizer>();
         public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+       
     }
 
 }

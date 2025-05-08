@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventManagement.Domains.Event_module
 {
@@ -110,12 +111,14 @@ namespace EventManagement.Domains.Event_module
 
         public async Task<List<Event>> GetAllAsync()
         {
-            return await _eventRepository.GetAllListAsync();
+            return await _eventRepository.GetAllIncluding(t => t.Tickets, o => o.Organizers).ToListAsync();
         }
 
         public async Task<List<Event>> GetEventsByOrganizerAsync(Guid organizerId)
         {
-            var organizer = await _organizerRepository.GetAsync(organizerId);
+            //include events with their tickets and organizers
+            var organizer = await _organizerRepository.GetAll().Include(o => o.Events).ThenInclude(e => e.Tickets).FirstOrDefaultAsync(o => o.Id == organizerId);
+           
             if (organizer == null)
             {
                 throw new UserFriendlyException("Organizer not found");
@@ -124,45 +127,125 @@ namespace EventManagement.Domains.Event_module
             return organizer.Events.ToList();
         }
 
+        //public async Task<Event> UpdateEventAsync(
+        //   Guid eventId,
+        //   string name = null,
+        //   string description = null,
+        //   DateTime? startDate = null,
+        //   DateTime? endDate = null,
+        //   string location = null,
+        //   decimal? price = null,
+        //   List<Guid> organizerIds = null,
+        //   List<Ticket> tickets = null,
+        //   string imageUrl = null)
+        //{
+        //    var @event = await _eventRepository.GetAsync(eventId);
+        //    if (@event == null)
+        //    {
+        //        throw new UserFriendlyException("Event not found");
+        //    }
+
+        //    // Update properties if provided  
+        //    if (!string.IsNullOrEmpty(name)) @event.Name = name;
+        //    if (!string.IsNullOrEmpty(description)) @event.Description = description;
+        //    if (startDate.HasValue) @event.StartDate = startDate.Value;
+        //    if (endDate.HasValue) @event.EndDate = endDate.Value;
+        //    if (!string.IsNullOrEmpty(location)) @event.Location = location;
+        //    if (price.HasValue) @event.Price = price.Value;
+
+        //    // Validate dates  
+        //    if (@event.StartDate >= @event.EndDate)
+        //    {
+        //        throw new UserFriendlyException("End date must be after start date");
+        //    }
+
+        //    // Update organizers if provided  
+        //    if (organizerIds != null && organizerIds.Any())
+        //    {
+        //        // Clear existing organizers  
+        //        @event.Organizers.Clear();
+
+        //        // Add new organizers  
+        //        foreach (var organizerId in organizerIds)
+        //        {
+        //            var organizer = await _organizerRepository.GetAsync(organizerId);
+        //            if (organizer == null)
+        //            {
+        //                throw new UserFriendlyException($"Organizer with ID {organizerId} not found");
+        //            }
+        //            @event.Organizers.Add(organizer);
+        //        }
+        //    }
+
+        //    // Update tickets if provided  
+        //    if (tickets != null)
+        //    {
+        //        // Remove existing tickets (or update in a more sophisticated implementation)  
+        //        foreach (var existingTicket in @event.Tickets.ToList())
+        //        {
+        //            await _ticketRepository.DeleteAsync(existingTicket.Id);
+        //            @event.Tickets.Remove(existingTicket);
+        //        }
+
+        //        // Add new tickets  
+        //        foreach (var ticket in tickets)
+        //        {
+        //            ticket.EventId = @event.Id;
+        //            ticket.RemainingQuantity = ticket.Quantity;
+        //            @event.Tickets.Add(ticket);
+        //            await _ticketRepository.InsertAsync(ticket);
+        //        }
+        //    }
+
+        //    await _eventRepository.UpdateAsync(@event);
+        //    return @event;
+        //}
+
         public async Task<Event> UpdateEventAsync(
-            Guid eventId,
-            string name = null,
-            string description = null,
-            DateTime? startDate = null,
-            DateTime? endDate = null,
-            string location = null,
-            decimal? price = null,
-            List<Guid> organizerIds = null,
-            List<Ticket> tickets = null,
-            string imageUrl = null)
+   Guid eventId,
+   string name = null,
+   string description = null,
+   DateTime? startDate = null,
+   DateTime? endDate = null,
+   string location = null,
+   decimal? price = null,
+   List<Guid> organizerIds = null,
+   List<Ticket> tickets = null,
+   string imageUrl = null)
         {
+            // Validate input
+            if (startDate.HasValue && endDate.HasValue && startDate.Value >= endDate.Value)
+            {
+                throw new UserFriendlyException("End date must be after start date");
+            }
+
             var @event = await _eventRepository.GetAsync(eventId);
             if (@event == null)
             {
-                throw new UserFriendlyException("Event not found");
+                throw new UserFriendlyException($"Event with ID {eventId} not found");
             }
 
-            // Update properties if provided
+            // Update properties if provided  
             if (!string.IsNullOrEmpty(name)) @event.Name = name;
             if (!string.IsNullOrEmpty(description)) @event.Description = description;
             if (startDate.HasValue) @event.StartDate = startDate.Value;
             if (endDate.HasValue) @event.EndDate = endDate.Value;
             if (!string.IsNullOrEmpty(location)) @event.Location = location;
             if (price.HasValue) @event.Price = price.Value;
+            //if (!string.IsNullOrEmpty(imageUrl)) @event.ImageUrl = imageUrl;
 
-            // Validate dates
+            // Re-validate after applying changes
             if (@event.StartDate >= @event.EndDate)
             {
                 throw new UserFriendlyException("End date must be after start date");
             }
 
-            // Update organizers if provided
+            // Update organizers if provided  
             if (organizerIds != null && organizerIds.Any())
             {
-                // Clear existing organizers
-                @event.Organizers.Clear();
+                var validOrganizerIds = new List<Guid>();
 
-                // Add new organizers
+                // Verify organizers exist before modifying relationships
                 foreach (var organizerId in organizerIds)
                 {
                     var organizer = await _organizerRepository.GetAsync(organizerId);
@@ -170,33 +253,91 @@ namespace EventManagement.Domains.Event_module
                     {
                         throw new UserFriendlyException($"Organizer with ID {organizerId} not found");
                     }
+                    validOrganizerIds.Add(organizerId);
+                }
+
+                // Clear existing organizers  
+                @event.Organizers.Clear();
+
+                // Add new organizers  
+                foreach (var organizerId in validOrganizerIds)
+                {
+                    var organizer = await _organizerRepository.GetAsync(organizerId);
                     @event.Organizers.Add(organizer);
                 }
             }
 
-            // Update tickets if provided
-            if (tickets != null)
+            // Update tickets if provided  
+            if (tickets != null && tickets.Any())
             {
-                // Remove existing tickets (or update in a more sophisticated implementation)
-                foreach (var existingTicket in @event.Tickets.ToList())
+                // Create dictionary of existing tickets for easy lookup
+                var existingTicketsDict = @event.Tickets.ToDictionary(t => t.Id);
+                var newTicketIds = new HashSet<Guid>();
+
+                foreach (var inputTicket in tickets)
                 {
-                    await _ticketRepository.DeleteAsync(existingTicket.Id);
-                    @event.Tickets.Remove(existingTicket);
+                    // Validate ticket data
+                    if (inputTicket.Quantity < 0)
+                    {
+                        throw new UserFriendlyException($"Ticket quantity cannot be negative for ticket {inputTicket.Name}");
+                    }
+
+                    // Handle remaining quantity logic
+                    if (inputTicket.RemainingQuantity < 0 ||
+                        inputTicket.RemainingQuantity > inputTicket.Quantity)
+                    {
+                        inputTicket.RemainingQuantity = inputTicket.Quantity;
+                    }
+
+                    // Ensure ticket has an event ID
+                    inputTicket.EventId = @event.Id;
+
+                    // Process ticket based on whether it exists
+                    if (inputTicket.Id != Guid.Empty && existingTicketsDict.TryGetValue(inputTicket.Id, out var existingTicket))
+                    {
+                        // Update existing ticket
+                        existingTicket.Name = inputTicket.Name;
+                        existingTicket.Description = inputTicket.Description;
+                        existingTicket.Price = inputTicket.Price;
+                        existingTicket.Quantity = inputTicket.Quantity;
+                        existingTicket.RemainingQuantity = inputTicket.RemainingQuantity;
+                        existingTicket.Type = inputTicket.Type;
+
+                        await _ticketRepository.UpdateAsync(existingTicket);
+                        newTicketIds.Add(existingTicket.Id);
+                    }
+                    else
+                    {
+                        // Create new ticket
+                        if (inputTicket.Id == Guid.Empty)
+                        {
+                            inputTicket.Id = Guid.NewGuid();
+                        }
+
+                        @event.Tickets.Add(inputTicket);
+                        await _ticketRepository.InsertAsync(inputTicket);
+                        newTicketIds.Add(inputTicket.Id);
+                    }
                 }
 
-                // Add new tickets
-                foreach (var ticket in tickets)
+                // Remove tickets that weren't included in the update
+                foreach (var ticket in @event.Tickets.ToList())
                 {
-                    ticket.EventId = @event.Id;
-                    ticket.RemainingQuantity = ticket.Quantity;
-                    @event.Tickets.Add(ticket);
-                    await _ticketRepository.InsertAsync(ticket);
+                    if (!newTicketIds.Contains(ticket.Id))
+                    {
+                        @event.Tickets.Remove(ticket);
+                        await _ticketRepository.DeleteAsync(ticket.Id);
+                    }
                 }
             }
 
+            // Save changes
             await _eventRepository.UpdateAsync(@event);
             return @event;
         }
+
+
+
 
         public async Task DeleteEventAsync(Guid eventId)
         {
