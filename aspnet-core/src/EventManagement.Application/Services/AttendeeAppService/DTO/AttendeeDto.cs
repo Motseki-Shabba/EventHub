@@ -18,6 +18,8 @@ namespace EventManagement.Services.AttendeeAppService.DTO
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public User User { get; set; }
+
+       
     }
 
 }

@@ -8,7 +8,7 @@
     using Abp.Domain.Services;
     using Abp.UI;
     using EventManagement.Authorization.Users;
-  
+    using Microsoft.EntityFrameworkCore;
 
     namespace hrisApi.Domains.Event_Management
     {
@@ -17,17 +17,20 @@
             private readonly UserManager _userManager;
             private readonly IRepository<Organizer, Guid> _organizerRepository;
             private readonly IRepository<Event, Guid> _eventRepository;
+            private readonly IRepository<Ticket, Guid> _ticketRepository;
 
 
 
             public OrganizerManager(
                 UserManager userManager,
                 IRepository<Organizer, Guid> organizerRepository,
-                IRepository<Event, Guid> eventRepository)
+                IRepository<Event, Guid> eventRepository,
+                IRepository<Ticket, Guid> ticketRepository)
             {
                 _userManager = userManager;
                 _organizerRepository = organizerRepository;
                 _eventRepository = eventRepository;
+                _ticketRepository = ticketRepository;
             }
 
             public async Task<Organizer> CreateOrganizerAsync(
@@ -166,23 +169,36 @@
 
             public async Task<List<Organizer>> GetAllAsync()
             {
-                return await _organizerRepository.GetAllListAsync();
+                
+                return await _organizerRepository.GetAll().ToListAsync();
             }
 
-            public async Task<List<Organizer>> GetOrganizersAsync(string filter = null)
+            public Task<List<Organizer>> GetOrganizersAsync(string filter = null)
             {
-                return await _organizerRepository.GetAllListAsync(o =>
+                return GetOrganizersAsync(_organizerRepository, filter);
+            }
+
+            public async Task<List<Organizer>> GetOrganizersAsync(IRepository<Organizer, Guid> _organizerRepository, string filter = null)
+            {
+                // Use GetAllAsync to fetch the queryable collection asynchronously  
+                var organizersQuery = await _organizerRepository.GetAllAsync();
+
+                // Include related entities using LINQ's Include and ThenInclude  
+                var organizersWithDetails = await organizersQuery
+                    .Include(e => e.Events)
+                    .ThenInclude(t => t.Tickets)
+                    .ToListAsync();
+
+                // Apply the filter if provided  
+                return organizersWithDetails.Where(o =>
                     string.IsNullOrEmpty(filter) ||
                     o.NationalIdNumber.Contains(filter) ||
                     o.ContactInfo.Contains(filter) ||
                     o.Address.Contains(filter)
-                );
+                ).ToList();
             }
 
-            //public async Task<List<Event>> GetOrganizerEventsAsync(Guid organizerId)
-            //{
-            //    return await _eventRepository.GetAllListAsync(e => e.OrganizerID == organizerId);
-            //}
+           
         }
     }
 }

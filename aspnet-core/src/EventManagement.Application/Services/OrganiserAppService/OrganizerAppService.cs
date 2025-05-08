@@ -175,7 +175,7 @@ namespace EventManagement.Services.OrganiserAppService
 
         public override async Task<PagedResultDto<OrganizerDto>> GetAllAsync(PagedAndSortedResultRequestDto input)
         {
-            var query = Repository.GetAll().Include(u => u.User).Include(e => e.Events);
+            var query = Repository.GetAll().Include(u => u.User).Include(e => e.Events).Include(t => t.Tickets);
 
             // Apply paging
             var totalCount = await query.CountAsync();

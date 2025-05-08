@@ -1758,6 +1758,9 @@ namespace EventManagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("OrganizerId")
+                        .HasColumnType("uuid");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
@@ -1773,6 +1776,8 @@ namespace EventManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("OrganizerId");
 
                     b.ToTable("Tickets");
                 });
@@ -2104,6 +2109,10 @@ namespace EventManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EventManagement.Domains.Organizer", null)
+                        .WithMany("Tickets")
+                        .HasForeignKey("OrganizerId");
+
                     b.Navigation("Event");
                 });
 
@@ -2221,6 +2230,11 @@ namespace EventManagement.Migrations
                 });
 
             modelBuilder.Entity("EventManagement.Domains.Event", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("EventManagement.Domains.Organizer", b =>
                 {
                     b.Navigation("Tickets");
                 });
