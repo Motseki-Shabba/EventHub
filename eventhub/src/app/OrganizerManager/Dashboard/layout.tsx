@@ -63,7 +63,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {
                   key: "1",
                   icon: <UserOutlined />,
-                  label: "Events",
+                  label: "nav 1",
                 },
                 {
                   key: "2",
