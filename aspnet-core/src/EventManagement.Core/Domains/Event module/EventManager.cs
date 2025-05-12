@@ -73,6 +73,7 @@ namespace EventManagement.Domains.Event_module
                 EndDate = endDate,
                 Location = location,
                 Price = price,
+                ImageUrl = imageUrl,
                 Tickets = new List<Ticket>()
             };
 
@@ -202,8 +203,8 @@ namespace EventManagement.Domains.Event_module
         //}
 
         public async Task<Event> UpdateEventAsync(
-   Guid eventId,
-   string name = null,
+        Guid eventId,
+         string name = null,
    string description = null,
    DateTime? startDate = null,
    DateTime? endDate = null,
