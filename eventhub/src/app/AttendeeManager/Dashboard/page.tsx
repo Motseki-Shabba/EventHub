@@ -1,7 +1,8 @@
 "use client";
 // import OrganizerManagement from "@/app/OrganizerManager/Dashboard/page";
 import { useAttendeeActions, useAttendeeState } from "@/Providers/Auth";
-import EventManagement from "@/app/Components/Event/page";
+//import EventManagement from "@/app/Components/Event/page";
+import EventsDisplay from "@/app/Components/EventsCards/page";
 import React, { useEffect } from "react";
 
 // App component wraps MainLayout with AttendeeProvider
@@ -20,9 +21,9 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <EventManagement />
+      {/* <EventManagement /> */}
       {/* {<OrganizerManagement />} */}
-      {/* {<EventsDisplay />} */}
+      {<EventsDisplay />}
     </div>
   );
 };

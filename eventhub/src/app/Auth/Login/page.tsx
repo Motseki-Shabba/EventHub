@@ -14,7 +14,7 @@ const AttendeeLoginForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Get authentication state and actions from context
-  const { isPending, isSuccess, isError } = useAttendeeState();
+  const { isPending, isSuccess, isError, currentRole } = useAttendeeState();
   const { loginAttendee, resetStateFlags } = useAttendeeActions();
   const router = useRouter();
 
@@ -26,12 +26,12 @@ const AttendeeLoginForm: React.FC = () => {
   }, [userNameOrEmailAddress, password]);
 
   // Handle successful login
-  useEffect(() => {
-    if (isSuccess) {
-      router.push("/AttendeeManager/Dashboard");
-      resetStateFlags(); // Reset state after navigation
-    }
-  }, [isSuccess, router]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     router.push("/AttendeeManager/Dashboard");
+  //     resetStateFlags(); // Reset state after navigation
+  //   }
+  // }, [isSuccess, router]);
 
   // Reset error flags when component unmounts
   // useEffect(() => {
@@ -57,6 +57,28 @@ const AttendeeLoginForm: React.FC = () => {
       setErrorMessage("Login failed. Please check your credentials.");
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      //toast("Authorized", "success");
+      resetStateFlags();
+      switch (currentRole) {
+        case "attendee":
+          router.push("/AttendeeManager/Dashboard");
+          break;
+        case "organizer":
+          router.push("/EventManager/Dashboard");
+          break;
+        // default:
+        //   router.push("/applicant");
+        //   break;
+      }
+    }
+    if (isError) {
+      //toast("Erorr,please check your credentials", "error");
+      resetStateFlags();
+    }
+  }, [isSuccess, isError]);
 
   return (
     <div className={styles.pageContainer}>

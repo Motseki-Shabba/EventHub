@@ -22,11 +22,12 @@ const withAuth = (WrappedLayout: React.ComponentType<LayoutProps>) => {
       }
 
       try {
+        debugger;
         const role = getRole(token);
 
         const roleRedirectMap: Record<string, string> = {
-          ATTENDEE: "/AttendeeManager",
-          ORGANIZER: "/OrganizerManager",
+          attendee: "/AttendeeManager",
+          organizer: "/EventManager",
         };
 
         const destination = roleRedirectMap[role] || "/";
