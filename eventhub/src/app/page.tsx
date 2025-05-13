@@ -75,10 +75,10 @@ const EventHub = () => {
               Manage and attend events with ease, from anywhere in the world.
             </p>
             <div className={styles.heroButtons}>
-              <Link href="/events" className={styles.primaryButton}>
+              <Link href="/Auth/Login" className={styles.primaryButton}>
                 Browse Events
               </Link>
-              <Link href="/create" className={styles.secondaryButton}>
+              <Link href="/Auth/Login" className={styles.secondaryButton}>
                 Create Event
               </Link>
             </div>

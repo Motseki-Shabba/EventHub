@@ -61,9 +61,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               defaultSelectedKeys={["1"]}
               items={[
                 {
-                  key: "1",
+                  key: "/AttendeeManager",
                   icon: <UserOutlined />,
-                  label: "Events",
+                  label: "Home",
                 },
                 {
                   key: "2",
@@ -76,6 +76,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   label: "nav 3",
                 },
               ]}
+              onClick={({ key }) => router.push(key)}
             />
           </Sider>
 

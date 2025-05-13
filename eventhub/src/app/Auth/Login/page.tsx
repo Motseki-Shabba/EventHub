@@ -64,10 +64,10 @@ const AttendeeLoginForm: React.FC = () => {
       resetStateFlags();
       switch (currentRole) {
         case "attendee":
-          router.push("/AttendeeManager/Dashboard");
+          router.push("/AttendeeManager");
           break;
         case "organizer":
-          router.push("/EventManager/Dashboard");
+          router.push("/OrganizerManager");
           break;
         // default:
         //   router.push("/applicant");
