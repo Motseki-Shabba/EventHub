@@ -35,6 +35,7 @@ export const AttendeeProvider = ({
   const instance = getAxiosInstace();
 
   useEffect(() => {
+    debugger;
     const token = sessionStorage.getItem("accessToken");
     if (token) {
       const role = getRole(token);

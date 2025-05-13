@@ -4,6 +4,7 @@ import "./globals.css";
 import { AttendeeProvider } from "@/Providers/Auth";
 import { ConfigProvider } from "antd";
 import { EventProvider } from "@/Providers/Event";
+import { OrganizerProvider } from "@/Providers/Organizer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +37,12 @@ export default function RootLayout({
         }}
       >
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <EventProvider>
-            {" "}
-            <AttendeeProvider>{children}</AttendeeProvider>
-          </EventProvider>
+          <OrganizerProvider>
+            <EventProvider>
+              {" "}
+              <AttendeeProvider>{children}</AttendeeProvider>
+            </EventProvider>
+          </OrganizerProvider>
         </body>
       </ConfigProvider>
     </html>
