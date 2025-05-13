@@ -4,15 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import styles from "./page.module.css";
 
-// interface Event {
-//   id: number;
-//   title: string;
-//   date: string;
-//   location: string;
-//   category: string;
-//   attendees: number;
-// }
-
 const EventHub = () => {
   // Sample event data
   const events = [

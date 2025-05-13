@@ -38,7 +38,7 @@ export const AttendeeProvider = ({
     const token = sessionStorage.getItem("accessToken");
     if (token) {
       const role = getRole(token);
-      debugger;
+
       updateRole(role);
       getCurrentUser(token);
       dispatch(loginAttendeeSuccess(token));
@@ -48,7 +48,6 @@ export const AttendeeProvider = ({
   const loginAttendee = async (loginData: ILoginData) => {
     dispatch(loginAttendeePending());
 
-    debugger;
     const endpoint: string = `/api/TokenAuth/Authenticate`;
 
     await instance
@@ -56,7 +55,7 @@ export const AttendeeProvider = ({
 
       .then((response) => {
         sessionStorage.setItem("accessToken", response.data.result.accessToken);
-        debugger;
+
         const role = getRole(response.data.result.accessToken);
         updateRole(role);
 
@@ -70,7 +69,6 @@ export const AttendeeProvider = ({
   };
 
   const getCurrentUser = async (jwtToken: string) => {
-    debugger;
     dispatch(getCurrentUserPending());
     const endpoint = `/api/services/app/Session/GetCurrentLoginInformations`;
     await instance
@@ -80,14 +78,12 @@ export const AttendeeProvider = ({
         },
       })
       .then((response) => {
-        debugger;
         if (response.status === 200 && response.data) {
           const CurrentUser: IUser = response.data.result.user;
           dispatch(getCurrentUserSuccess(CurrentUser));
         }
       })
       .catch((error) => {
-        debugger;
         console.error(error);
         dispatch(getCurrentUserError());
       });
