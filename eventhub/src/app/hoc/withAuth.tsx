@@ -27,7 +27,7 @@ const withAuth = (WrappedLayout: React.ComponentType<LayoutProps>) => {
 
         const roleRedirectMap: Record<string, string> = {
           attendee: "/AttendeeManager",
-          organizer: "/EventManager",
+          organizer: "/OrganizerManager",
         };
 
         const destination = roleRedirectMap[role] || "/";

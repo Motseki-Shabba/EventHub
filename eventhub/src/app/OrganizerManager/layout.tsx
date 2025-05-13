@@ -63,21 +63,22 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 defaultSelectedKeys={["1"]}
                 items={[
                   {
-                    key: "1",
+                    key: "/OrganizerManager",
                     icon: <UserOutlined />,
-                    label: "Create Event",
+                    label: "home",
                   },
                   {
-                    key: "2",
+                    key: "/OrganizerManager/CreateEvent",
                     icon: <VideoCameraOutlined />,
-                    label: "nav 2",
+                    label: "Create Events",
                   },
                   {
-                    key: "3",
+                    key: "/OrganizerManager/ViewEvents",
                     icon: <UploadOutlined />,
-                    label: "nav 3",
+                    label: "View Events",
                   },
                 ]}
+                onClick={({ key }) => router.push(key)}
               />
             </Sider>
 
@@ -103,6 +104,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     height: 64,
                   }}
                 />
+                <div>
+                  <h2>Organizer Dashboard</h2>
+                </div>
                 <Dropdown menu={userMenu} trigger={["click"]}>
                   <Button type="text" icon={<UserOutlined />}>
                     {CurrentUser?.emailAddress ?? "User"}
