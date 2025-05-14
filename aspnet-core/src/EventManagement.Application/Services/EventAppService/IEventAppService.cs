@@ -21,6 +21,8 @@ namespace EventManagement.Services.EventAppService
         Task<List<EventDto>> GetAllEventsWithTicketsAsync();
 
         Task<List<EventDto>> GetAllEventsAsync();
+
+        Task<TicketPurchaseResponseDto> PurchaseTicketsAsync(TicketPurchaseRequestDto input);
     }
 
 }

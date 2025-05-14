@@ -161,58 +161,7 @@ namespace EventManagement.Services.EventAppService
             return await GetAllEventsWithTicketsAsync();
         }
 
-        // Implement UpdateAsync method
-        //public async Task<EventDto> UpdateEvent(UpdateEventDto input)
-        //{
-        //    // Map tickets if provided
-        //    List<Ticket> ticketsToUpdate = null;
-        //    if (input.Tickets != null && input.Tickets.Any())
-        //    {
-        //        ticketsToUpdate = input.Tickets.Select(t => new Ticket
-        //        {
-        //            Id = t.Id,
-        //            Name = t.Name,
-        //            Description = t.Description,
-        //            Price = t.Price,
-        //            Quantity = t.Quantity,
-        //            RemainingQuantity = t.RemainingQuantity,
-        //            Type = (Domains.TicketType)t.Type,
-        //            EventId = input.Id
-        //        }).ToList();
-        //    }
-
-        //    // Update event using manager
-        //    var @event = await _eventManager.UpdateEventAsync(
-        //        input.Id,
-        //        input.Name,
-        //        input.Description,
-        //        input.StartDate,
-        //        input.EndDate,
-        //        input.Location,
-        //        input.Price,
-        //        input.OrganizerIds,
-        //        ticketsToUpdate,
-        //        input.ImageUrl
-        //    );
-
-        //    // Map to DTO with ticket information and return
-        //    var eventDto = ObjectMapper.Map<EventDto>(@event);
-
-        //    // Map tickets to DTOs
-        //    eventDto.Tickets = @event.Tickets.Select(t => new TicketDto
-        //    {
-        //        Id = t.Id,
-        //        Name = t.Name,
-        //        Description = t.Description,
-        //        Price = t.Price,
-        //        Quantity = t.Quantity,
-        //        RemainingQuantity = t.RemainingQuantity,
-        //        Type = (TicketType)t.Type,
-        //        EventId = t.EventId
-        //    }).ToList();
-
-        //    return eventDto;
-        //}
+     
         public async Task<EventDto> UpdateEvent(UpdateEventDto input)
         {
             try
@@ -286,11 +235,84 @@ namespace EventManagement.Services.EventAppService
         }
 
 
+        public async Task<TicketPurchaseResponseDto> PurchaseTicketsAsync(TicketPurchaseRequestDto input)
+        {
+            try
+            {
+                // Input validation
+                if (input.TicketId == Guid.Empty)
+                {
+                    throw new UserFriendlyException("Ticket ID cannot be empty");
+                }
 
-        // Optional: Create an UpdateAsync method that uses UpdateEvent
-        //public override async Task<EventDto> UpdateAsync(UpdateEventDto input)
-        //{
-        //    return await UpdateEvent(input);
-        //}
+                if (input.Quantity <= 0)
+                {
+                    throw new UserFriendlyException("Quantity must be greater than zero");
+                }
+
+                // Get the ticket from repository
+                var ticket = await _ticketRepository.GetAsync(input.TicketId);
+                if (ticket == null)
+                {
+                    throw new UserFriendlyException("Ticket not found");
+                }
+
+                // Check if sufficient tickets are available
+                if (ticket.RemainingQuantity < input.Quantity)
+                {
+                    throw new UserFriendlyException($"Insufficient tickets available. Only {ticket.RemainingQuantity} tickets remaining.");
+                }
+
+                // Get the event associated with the ticket
+                var @event = await Repository.GetAsync(ticket.EventId);
+                if (@event == null)
+                {
+                    throw new UserFriendlyException("Event not found");
+                }
+
+                // Check if the event is still active
+                if (@event.EndDate < DateTime.Now)
+                {
+                    throw new UserFriendlyException("This event has already ended");
+                }
+
+                // Update the remaining ticket quantity
+                ticket.RemainingQuantity -= input.Quantity;
+                await _ticketRepository.UpdateAsync(ticket);
+
+                // Calculate the total price
+                decimal totalPrice = ticket.Price * input.Quantity;
+
+               
+                // Return the purchase information
+                return new TicketPurchaseResponseDto
+                {
+                    Success = true,
+                    TicketId = ticket.Id,
+                    EventId = ticket.EventId,
+                    EventName = @event.Name,
+                    TicketName = ticket.Name,
+                    Quantity = input.Quantity,
+                    PricePerTicket = ticket.Price,
+                    TotalPrice = totalPrice,
+                    PurchaseDate = DateTime.Now,
+                    RemainingTickets = ticket.RemainingQuantity
+                };
+            }
+            catch (UserFriendlyException)
+            {
+                // Re-throw user-friendly exceptions
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // _logger.LogError(ex, "Error purchasing tickets");
+                throw new UserFriendlyException("An error occurred while processing your ticket purchase. Please try again.");
+            }
+        }
+
+
+       
     }
 }

@@ -63,12 +63,12 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {
                   key: "/AttendeeManager",
                   icon: <UserOutlined />,
-                  label: "Home",
+                  label: "Events",
                 },
                 {
-                  key: "2",
+                  key: "/AttendeeManager/Verification",
                   icon: <VideoCameraOutlined />,
-                  label: "nav 2",
+                  label: "Ticket Verification",
                 },
                 {
                   key: "3",

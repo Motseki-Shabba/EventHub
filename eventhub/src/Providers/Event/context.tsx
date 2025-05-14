@@ -26,6 +26,26 @@ export interface IEvent {
   tickets: ITicket[];
 }
 
+// New interface for ticket purchase request
+export interface ITicketPurchaseRequest {
+  ticketId: string;
+  quantity: number;
+}
+
+// New interface for ticket purchase response
+export interface ITicketPurchaseResponse {
+  success: boolean;
+  ticketId: string;
+  eventId: string;
+  eventName: string;
+  ticketName: string;
+  quantity: number;
+  pricePerTicket: number;
+  totalPrice: number;
+  purchaseDate: string | Date;
+  remainingTickets: number;
+}
+
 export interface IEventStateContext {
   isPending: boolean;
   isSuccess: boolean;
@@ -33,6 +53,8 @@ export interface IEventStateContext {
   events?: IEvent[];
   currentEvent?: IEvent;
   errorMessage?: string;
+  // Add new state for ticket purchase
+  ticketPurchaseResponse?: ITicketPurchaseResponse;
 }
 
 export interface IEventActionContext {
@@ -41,6 +63,10 @@ export interface IEventActionContext {
   getEventById: (id: string) => Promise<void>;
   deleteEvent: (id: string) => Promise<void>;
   updateEvent: (event: IEvent) => Promise<void>;
+  // Add new purchase tickets action
+  purchaseTickets: (
+    request: ITicketPurchaseRequest
+  ) => Promise<ITicketPurchaseResponse>;
   resetStateFlags: () => void;
 }
 
@@ -62,5 +88,8 @@ export const EventActionContext = createContext<IEventActionContext>({
   getEventById: async () => {},
   deleteEvent: async () => {},
   updateEvent: async () => {},
+  purchaseTickets: async () => {
+    return {} as ITicketPurchaseResponse;
+  },
   resetStateFlags: () => {},
 });
