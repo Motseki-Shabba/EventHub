@@ -1,5 +1,9 @@
 import { createAction } from "redux-actions";
-import { IEvent, IEventStateContext } from "@/Providers/Event/context";
+import {
+  IEvent,
+  IEventStateContext,
+  ITicketPurchaseResponse,
+} from "@/Providers/Event/context";
 
 export enum EventActionEnums {
   createEventPending = "CREATE_EVENT_PENDING",
@@ -21,6 +25,11 @@ export enum EventActionEnums {
   updateEventPending = "UPDATE_EVENT_PENDING",
   updateEventSuccess = "UPDATE_EVENT_SUCCESS",
   updateEventError = "UPDATE_EVENT_ERROR",
+
+  // New actions for ticket purchase
+  purchaseTicketsPending = "PURCHASE_TICKETS_PENDING",
+  purchaseTicketsSuccess = "PURCHASE_TICKETS_SUCCESS",
+  purchaseTicketsError = "PURCHASE_TICKETS_ERROR",
 
   resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
@@ -131,6 +140,33 @@ export const updateEventSuccess = createAction<IEventStateContext, IEvent>(
 );
 export const updateEventError = createAction<IEventStateContext, string>(
   EventActionEnums.updateEventError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
+);
+
+// New actions for ticket purchase
+export const purchaseTicketsPending = createAction<IEventStateContext>(
+  EventActionEnums.purchaseTicketsPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+export const purchaseTicketsSuccess = createAction<
+  IEventStateContext,
+  ITicketPurchaseResponse
+>(
+  EventActionEnums.purchaseTicketsSuccess,
+  (response: ITicketPurchaseResponse) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    ticketPurchaseResponse: response,
+  })
+);
+export const purchaseTicketsError = createAction<IEventStateContext, string>(
+  EventActionEnums.purchaseTicketsError,
   (errorMessage: string) => ({
     isPending: false,
     isSuccess: false,

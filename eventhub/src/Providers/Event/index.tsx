@@ -14,6 +14,9 @@ import {
   getEventByIdError,
   getEventByIdPending,
   getEventByIdSuccess,
+  purchaseTicketsError,
+  purchaseTicketsPending,
+  purchaseTicketsSuccess,
   resetStateFlagsAction,
   updateEventError,
   updateEventPending,
@@ -24,6 +27,8 @@ import {
   EventStateContext,
   IEvent,
   INITIAL_STATE,
+  ITicketPurchaseRequest,
+  ITicketPurchaseResponse,
 } from "@/Providers/Event/context";
 import { EventReducer } from "@/Providers/Event/reducer";
 
@@ -156,6 +161,56 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // New method to purchase tickets
+  const purchaseTickets = async (
+    request: ITicketPurchaseRequest
+  ): Promise<ITicketPurchaseResponse> => {
+    dispatch(purchaseTicketsPending());
+    const endpoint = `/api/services/app/Event/PurchaseTickets`;
+
+    try {
+      const token = sessionStorage.getItem("accessToken");
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      const response = await instance.post(endpoint, request, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200 && response.data) {
+        const result = response.data.result as ITicketPurchaseResponse;
+        dispatch(purchaseTicketsSuccess(result));
+
+        // If we have the current event in the state, update its ticket quantity
+        if (state.currentEvent) {
+          const updatedEvent = { ...state.currentEvent };
+          const ticketIndex = updatedEvent.tickets.findIndex(
+            (t) => t.id === request.ticketId
+          );
+
+          if (ticketIndex !== -1) {
+            updatedEvent.tickets[ticketIndex].remainingQuantity =
+              result.remainingTickets;
+            dispatch(getEventByIdSuccess(updatedEvent));
+          }
+        }
+
+        return result;
+      } else {
+        throw new Error("Failed to purchase tickets");
+      }
+    } catch (error) {
+      const backendMessage =
+        error instanceof Error ? error.message : "Failed to purchase tickets";
+      dispatch(purchaseTicketsError(backendMessage));
+      throw new Error(backendMessage);
+    }
+  };
+
   const resetStateFlags = () => {
     dispatch(resetStateFlagsAction());
   };
@@ -169,6 +224,7 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
           getEventById,
           deleteEvent,
           updateEvent,
+          purchaseTickets,
           resetStateFlags,
         }}
       >

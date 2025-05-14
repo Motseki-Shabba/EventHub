@@ -74,6 +74,20 @@ export const EventReducer = handleActions<IEventStateContext>(
       ...action.payload,
     }),
 
+    // Handling purchase tickets actions
+    [EventActionEnums.purchaseTicketsPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EventActionEnums.purchaseTicketsSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EventActionEnums.purchaseTicketsError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
     // Handling reset state flags action
     [EventActionEnums.resetStateFlagsAction]: (state, action) => ({
       ...state,
