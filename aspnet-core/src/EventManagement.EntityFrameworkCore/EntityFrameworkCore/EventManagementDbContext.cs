@@ -6,6 +6,7 @@ using EventManagement.Authorization.Users;
 using EventManagement.Domains;
 using EventManagement.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
+using EventManagement.Domains.Comments;
 
 namespace EventManagement.EntityFrameworkCore;
 
@@ -24,6 +25,9 @@ public class EventManagementDbContext : AbpZeroDbContext<Tenant, Role, User, Eve
     //dbset for Attendee
 
     public DbSet<Attendee> Attendees { get; set; }
+
+    //dbset for comment
+    public DbSet<Comment> Comments { get; set; }
 
 
     public EventManagementDbContext(DbContextOptions<EventManagementDbContext> options)

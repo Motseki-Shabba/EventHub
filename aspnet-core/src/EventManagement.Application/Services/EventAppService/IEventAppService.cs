@@ -23,6 +23,7 @@ namespace EventManagement.Services.EventAppService
         Task<List<EventDto>> GetAllEventsAsync();
 
         Task<TicketPurchaseResponseDto> PurchaseTicketsAsync(TicketPurchaseRequestDto input);
+        Task<EventWithCommentsDto> GetEventWithCommentsAsync(Guid eventId);
     }
 
 }
