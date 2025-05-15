@@ -161,10 +161,7 @@ const EventHub = () => {
                   </div>
                 </div>
 
-                <Link
-                  href={`/events/${event.id}`}
-                  className={styles.eventButton}
-                >
+                <Link href={"/Auth/Login"} className={styles.eventButton}>
                   Get Tickets
                 </Link>
               </div>
@@ -173,7 +170,7 @@ const EventHub = () => {
         </div>
 
         <div className={styles.viewAllContainer}>
-          <Link href="/events" className={styles.viewAllButton}>
+          <Link href={"/Auth/Login"} className={styles.viewAllButton}>
             View All Events
           </Link>
         </div>
@@ -207,7 +204,7 @@ const EventHub = () => {
           Join thousands of event organizers and attendees on our platform.
         </p>
         <div className={styles.ctaButtons}>
-          <Link href="/register" className={styles.ctaPrimaryButton}>
+          <Link href={"/Auth/SignUp"} className={styles.ctaPrimaryButton}>
             Sign Up Free
           </Link>
           <Link href="/contact" className={styles.ctaSecondaryButton}>
