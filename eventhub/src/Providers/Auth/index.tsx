@@ -63,7 +63,7 @@ export const AttendeeProvider = ({
         dispatch(loginAttendeeSuccess(response.data.result.accessToken));
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Auth Error: " + error);
         dispatch(loginAttendeeError());
       });
   };
