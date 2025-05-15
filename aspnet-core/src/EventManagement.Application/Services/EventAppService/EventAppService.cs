@@ -9,6 +9,7 @@ using EventManagement.Domains;
 using EventManagement.Services.EventAppService.DTO;
 using Abp.Application.Services.Dto;
 using Abp.UI;
+using EventManagement.Services.EventCommentHub;
 
 namespace EventManagement.Services.EventAppService
 {
@@ -313,6 +314,46 @@ namespace EventManagement.Services.EventAppService
         }
 
 
-       
+        public async Task<EventWithCommentsDto> GetEventWithCommentsAsync(Guid eventId)
+        {
+            var @event = await _eventManager.GetAsync(eventId);
+            var comments = await _eventManager.GetEventCommentsAsync(eventId);
+
+            var eventDto = ObjectMapper.Map<EventDto>(@event);
+
+            // Map tickets to DTOs
+            eventDto.Tickets = @event.Tickets.Select(t => new TicketDto
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Price = t.Price,
+                Quantity = t.Quantity,
+                RemainingQuantity = t.RemainingQuantity,
+                Type = (TicketType)t.Type,
+                EventId = t.EventId
+            }).ToList();
+
+            // Map comments to DTOs
+            eventDto.Comments = comments.Select(c => new CommentDto
+            {
+                Id = c.Id,
+                Text = c.Text,
+                EventId = c.EventId,
+                UserId = c.UserId,
+                UserName = c.UserName,
+                CreationTime = c.CreationTime
+            }).ToList();
+
+            return new EventWithCommentsDto
+            {
+                Event = eventDto,
+                Comments = eventDto.Comments
+            };
+        }
+
+
+
+
     }
 }

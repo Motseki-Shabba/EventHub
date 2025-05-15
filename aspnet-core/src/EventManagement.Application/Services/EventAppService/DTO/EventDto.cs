@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using EventManagement.Domains;
+using EventManagement.Services.EventCommentHub;
 using EventManagement.Services.OrganiserAppService.Dto;
 
 namespace EventManagement.Services.EventAppService.DTO
@@ -35,7 +36,15 @@ namespace EventManagement.Services.EventAppService.DTO
 
         public List<Guid> OrganizerIds { get; set; } 
 
-        public List<TicketDto> Tickets { get; set; } 
+        public List<TicketDto> Tickets { get; set; }
+
+        public List<CommentDto> Comments { get; set; }
+
+        public EventDto()
+        {
+            Comments = new List<CommentDto>();
+            // Initialize other collections if they exist...
+        }
 
     }
 }

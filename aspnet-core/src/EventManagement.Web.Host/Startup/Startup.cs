@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using EventManagement.Configurations;
+using EventManagement.Services.EventCommentHub;
 
 namespace EventManagement.Web.Host.Startup
 {
@@ -102,6 +103,7 @@ namespace EventManagement.Web.Host.Startup
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<EventCommentHub>("/signalr-hubs/event-comment");
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint

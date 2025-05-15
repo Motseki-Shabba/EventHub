@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
+using Abp.Runtime.Session;
 using Abp.UI;
+using EventManagement.Domains.Comments;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManagement.Domains.Event_module
@@ -15,15 +17,18 @@ namespace EventManagement.Domains.Event_module
         private readonly IRepository<Event, Guid> _eventRepository;
         private readonly IRepository<Organizer, Guid> _organizerRepository;
         private readonly IRepository<Ticket, Guid> _ticketRepository;
+        private readonly IRepository<Comment, Guid> _commentRepository;
 
         public EventManager(
             IRepository<Event, Guid> eventRepository,
             IRepository<Organizer, Guid> organizerRepository,
+            IRepository<Comment, Guid> commentRepository,
             IRepository<Ticket, Guid> ticketRepository)
         {
             _eventRepository = eventRepository;
             _organizerRepository = organizerRepository;
             _ticketRepository = ticketRepository;
+            _commentRepository = commentRepository;
         }
 
         public async Task<Event> CreateEventAsync(
@@ -128,80 +133,7 @@ namespace EventManagement.Domains.Event_module
             return organizer.Events.ToList();
         }
 
-        //public async Task<Event> UpdateEventAsync(
-        //   Guid eventId,
-        //   string name = null,
-        //   string description = null,
-        //   DateTime? startDate = null,
-        //   DateTime? endDate = null,
-        //   string location = null,
-        //   decimal? price = null,
-        //   List<Guid> organizerIds = null,
-        //   List<Ticket> tickets = null,
-        //   string imageUrl = null)
-        //{
-        //    var @event = await _eventRepository.GetAsync(eventId);
-        //    if (@event == null)
-        //    {
-        //        throw new UserFriendlyException("Event not found");
-        //    }
-
-        //    // Update properties if provided  
-        //    if (!string.IsNullOrEmpty(name)) @event.Name = name;
-        //    if (!string.IsNullOrEmpty(description)) @event.Description = description;
-        //    if (startDate.HasValue) @event.StartDate = startDate.Value;
-        //    if (endDate.HasValue) @event.EndDate = endDate.Value;
-        //    if (!string.IsNullOrEmpty(location)) @event.Location = location;
-        //    if (price.HasValue) @event.Price = price.Value;
-
-        //    // Validate dates  
-        //    if (@event.StartDate >= @event.EndDate)
-        //    {
-        //        throw new UserFriendlyException("End date must be after start date");
-        //    }
-
-        //    // Update organizers if provided  
-        //    if (organizerIds != null && organizerIds.Any())
-        //    {
-        //        // Clear existing organizers  
-        //        @event.Organizers.Clear();
-
-        //        // Add new organizers  
-        //        foreach (var organizerId in organizerIds)
-        //        {
-        //            var organizer = await _organizerRepository.GetAsync(organizerId);
-        //            if (organizer == null)
-        //            {
-        //                throw new UserFriendlyException($"Organizer with ID {organizerId} not found");
-        //            }
-        //            @event.Organizers.Add(organizer);
-        //        }
-        //    }
-
-        //    // Update tickets if provided  
-        //    if (tickets != null)
-        //    {
-        //        // Remove existing tickets (or update in a more sophisticated implementation)  
-        //        foreach (var existingTicket in @event.Tickets.ToList())
-        //        {
-        //            await _ticketRepository.DeleteAsync(existingTicket.Id);
-        //            @event.Tickets.Remove(existingTicket);
-        //        }
-
-        //        // Add new tickets  
-        //        foreach (var ticket in tickets)
-        //        {
-        //            ticket.EventId = @event.Id;
-        //            ticket.RemainingQuantity = ticket.Quantity;
-        //            @event.Tickets.Add(ticket);
-        //            await _ticketRepository.InsertAsync(ticket);
-        //        }
-        //    }
-
-        //    await _eventRepository.UpdateAsync(@event);
-        //    return @event;
-        //}
-
+       
         public async Task<Event> UpdateEventAsync(
         Guid eventId,
          string name = null,
@@ -363,6 +295,52 @@ namespace EventManagement.Domains.Event_module
             @event.Tickets.Clear();
 
             await _eventRepository.DeleteAsync(eventId);
+        }
+
+        // Add new method to create a comment
+        public async Task<Comment> CreateCommentAsync(
+            string text,
+            Guid eventId,
+            long userId,
+            string userName)
+        {
+            // Validate input
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new UserFriendlyException("Comment text cannot be empty");
+            }
+
+            // Check if event exists
+            var @event = await _eventRepository.GetAsync(eventId);
+            if (@event == null)
+            {
+                throw new UserFriendlyException("Event not found");
+            }
+
+            // Create and save the comment
+            var comment = new Comment
+            {
+                Id = Guid.NewGuid(),
+                Text = text,
+                EventId = eventId,
+                UserId = userId,
+                UserName = userName,
+                
+            };
+
+            await _commentRepository.InsertAsync(comment);
+
+            return comment;
+        }
+
+        // Add method to get comments for an event
+        public async Task<List<Comment>> GetEventCommentsAsync(Guid eventId)
+        {
+            return await Task.FromResult(
+                _commentRepository.GetAll()
+                .Where(c => c.EventId == eventId)
+                .OrderByDescending(c => c.CreationTime)
+                .ToList());
         }
     }
 }
