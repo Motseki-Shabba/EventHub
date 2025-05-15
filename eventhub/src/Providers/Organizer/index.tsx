@@ -56,13 +56,11 @@ export const OrganizerProvider = ({
       });
 
       if (response.status === 200 && response.data) {
-        debugger;
         dispatch(createOrganizerSuccess(response.data.result));
       } else {
         throw new Error("Failed to create organizer");
       }
     } catch {
-      debugger;
       const backendMessage = "Failed to create organizer";
       dispatch(createOrganizerError(backendMessage));
       throw new Error(backendMessage);
