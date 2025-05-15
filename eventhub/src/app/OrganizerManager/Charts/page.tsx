@@ -63,11 +63,11 @@ interface TicketAvailabilityData {
 }
 
 interface PriceRanges {
-  "$0-50": number;
-  "$51-100": number;
-  "$101-200": number;
-  "$201-500": number;
-  "$500+": number;
+  "R0-50": number;
+  "R51-100": number;
+  "R101-200": number;
+  "R201-500": number;
+  "R500+": number;
 }
 
 const EventCharts: React.FC = () => {
@@ -285,19 +285,19 @@ const EventCharts: React.FC = () => {
 
   // Events by price range
   const priceRanges: PriceRanges = {
-    "$0-50": 0,
-    "$51-100": 0,
-    "$101-200": 0,
-    "$201-500": 0,
-    "$500+": 0,
+    "R0-50": 0,
+    "R51-100": 0,
+    "R101-200": 0,
+    "R201-500": 0,
+    "R500+": 0,
   };
 
   filteredEvents.forEach((event) => {
-    if (event.price <= 50) priceRanges["$0-50"]++;
-    else if (event.price <= 100) priceRanges["$51-100"]++;
-    else if (event.price <= 200) priceRanges["$101-200"]++;
-    else if (event.price <= 500) priceRanges["$201-500"]++;
-    else priceRanges["$500+"]++;
+    if (event.price <= 50) priceRanges["R0-50"]++;
+    else if (event.price <= 100) priceRanges["R51-100"]++;
+    else if (event.price <= 200) priceRanges["R101-200"]++;
+    else if (event.price <= 500) priceRanges["R201-500"]++;
+    else priceRanges["R500+"]++;
   });
 
   // Prepare chart data
