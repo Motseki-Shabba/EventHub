@@ -294,17 +294,6 @@ function EventsDisplay() {
     setQuantity(1);
   };
 
-  // Function to close My Tickets modal
-  // const closeMyTickets = () => {
-  //   setShowMyTickets(false);
-  // };
-
-  // Function to calculate total price based on quantity
-  // const calculateTotalPrice = () => {
-  //   if (!selectedTicket) return 0;
-  //   return selectedTicket.price * quantity;
-  // };
-
   // Enhanced PDF generation function
   const downloadTicketAsPDF = async () => {
     if (!ticketRef.current) return;
@@ -494,33 +483,13 @@ function EventsDisplay() {
     return filtered;
   }, [events, searchTerm, sortOption, priceRange, dateRange, locationFilter]);
 
-  // Handle quantity change
-  // const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = parseInt(e.target.value, 10);
-  //   if (isNaN(value) || value < 1) {
-  //     setQuantity(1);
-  //   } else if (
-  //     selectedTicket &&
-  //     selectedTicket.remainingQuantity &&
-  //     value > selectedTicket.remainingQuantity
-  //   ) {
-  //     setQuantity(selectedTicket.remainingQuantity);
-  //     api.warning({
-  //       message: "Maximum Tickets",
-  //       description: `You can only purchase up to ${selectedTicket.remainingQuantity} tickets.`,
-  //     });
-  //   } else {
-  //     setQuantity(value);
-  //   }
-  // };
-
   if (isPending || isProcessingPayment) {
     return (
       <div className={styles.loading}>
         <Spin indicator={<LoadingOutlined spin />} size="large" />
         <p>
           {isProcessingPayment
-            ? "Processing your payment..."
+            ? "Thank you for your purchase!"
             : "Loading events..."}
         </p>
       </div>

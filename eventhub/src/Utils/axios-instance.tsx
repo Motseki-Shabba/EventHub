@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const baseURL = "https://localhost:44311";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+//const baseURL = "https://eventhub-1-ggd5.onrender.com";
 
 export const getAxiosInstace = () => {
   const instance = axios.create({
