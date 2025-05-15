@@ -33,8 +33,13 @@ export const analyzeMathImage = async (imageFile: File): Promise<string> => {
 
   Validation criteria:
   - Check if the ticket includes a valid QR code
+  - Check if the ticket has a valid ticket code
+  - Check if the ticket has a location 
+  - Check if the ticket has a purchase date
   - Check if the ticket has a valid date (not expired and in correct format)
   - Check if the ticket is associated with a valid event
+  - if all the above checks are valid, return "Valid ticket" 
+  - Mark Valid ticket with a green check mark
 
     
 

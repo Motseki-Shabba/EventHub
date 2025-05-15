@@ -423,7 +423,7 @@ const AttendeeRegistrationForm: React.FC = () => {
 
             <p className={styles.loginPrompt}>
               Already have an account?{" "}
-              <Link href="/login" className={styles.loginLink}>
+              <Link href={"/Auth/Login"} className={styles.loginLink}>
                 Sign in
               </Link>
             </p>
