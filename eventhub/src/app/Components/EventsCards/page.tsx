@@ -811,7 +811,7 @@ function EventsDisplay() {
                     value={`${
                       typeof window !== "undefined"
                         ? window.location.origin
-                        : "http://localhost:3000"
+                        : "https://event-hub-s9mk.vercel.app"
                     }/AttendeeManager/ViewEvents?payment_status=success&event_id=${
                       selectedEvent.id
                     }&ticket_id=${selectedTicket.id || ""}`}
@@ -822,7 +822,7 @@ function EventsDisplay() {
                     value={`${
                       typeof window !== "undefined"
                         ? window.location.origin
-                        : "http://localhost:3000"
+                        : "https://event-hub-s9mk.vercel.app"
                     }/AttendeeManager/ViewEvents?payment_status=cancelled`}
                   />
                   <input
@@ -831,7 +831,7 @@ function EventsDisplay() {
                     value={`${
                       typeof window !== "undefined"
                         ? window.location.origin
-                        : "http://localhost:3000"
+                        : "https://event-hub-s9mk.vercel.app"
                     }/api/payment-notifications`}
                   />
 
