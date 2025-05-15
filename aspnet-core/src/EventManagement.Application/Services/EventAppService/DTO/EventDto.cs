@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using EventManagement.Domains;
 using EventManagement.Services.OrganiserAppService.Dto;
 
 namespace EventManagement.Services.EventAppService.DTO
 {
+    [AutoMapTo(typeof(Event))]
     public class EventDto : EntityDto<Guid>
     {
         [Required]
@@ -30,9 +33,9 @@ namespace EventManagement.Services.EventAppService.DTO
 
         public string ImageUrl { get; set; }
 
-        public List<Guid> OrganizerIds { get; set; } = new List<Guid>();
+        public List<Guid> OrganizerIds { get; set; } 
 
-        public List<TicketDto> Tickets { get; set; } = new List<TicketDto>();
+        public List<TicketDto> Tickets { get; set; } 
 
     }
 }

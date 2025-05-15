@@ -8,6 +8,7 @@ using Abp.Application.Services.Dto;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
+using Abp.Runtime.Session;
 using Abp.UI;
 using AutoMapper;
 using EventManagement.Authorization.Users;
@@ -23,13 +24,18 @@ namespace EventManagement.Services.AttendeeAppService
       IAttendeeAppService
     {
         private readonly AttendeeManager _attendeeManager;
+       
 
         public AttendeeAppService(
             IRepository<Attendee, Guid> repository,
-            AttendeeManager attendeeManager)
+            AttendeeManager attendeeManager, IRepository<Event, Guid> eventRepository
+       )
             : base(repository)
         {
+
             _attendeeManager = attendeeManager;
+           
+
         }
 
         public override async Task<AttendeeDto> CreateAsync(CreateAttendeeDto input)

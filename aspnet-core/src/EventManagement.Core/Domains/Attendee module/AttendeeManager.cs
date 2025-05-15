@@ -15,11 +15,14 @@ namespace EventManagement.Domains.Attendee_module
     {
         private readonly UserManager _userManager;
         private readonly IRepository<Attendee, Guid> _attendeeRepository;
-
+       
+      
         public AttendeeManager(UserManager userManager, IRepository<Attendee, Guid> attendeeRepository)
         {
             _userManager = userManager;
             _attendeeRepository = attendeeRepository;
+           
+            
         }
 
         public async Task<Attendee> CreateAsync(
@@ -47,7 +50,9 @@ namespace EventManagement.Domains.Attendee_module
                 throw new UserFriendlyException("Failed to create user: " + result.Errors.JoinAsString(", "));
             }
 
+
             await _userManager.AddToRoleAsync(user, "ATTENDEE");
+            
 
             var attendee = new Attendee
             {
@@ -61,5 +66,9 @@ namespace EventManagement.Domains.Attendee_module
            var results = await _attendeeRepository.InsertAsync(attendee);
             return results;
         }
+
+       
+
+
     }
 }
