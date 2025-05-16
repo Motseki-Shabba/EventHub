@@ -23,6 +23,10 @@ is a comprehensive event management platform that connects event organizers with
 Domain Model
 The platform is structured around these core entities:
 
+**Project Plan**
+
+https://boxfusionint-my.sharepoint.com/:w:/g/personal/motseki_tshabalala_boxfusion_io/ER2jl3hTnl5DplJn-7a5vIEBQFpnxRkuqAzL8tzIMUNXtQ?e=PrkEmS
+
 Event - Contains details about date, location, organizer, tickets, and attendees
 Organizer - Users who create and manage events
 Attendee - Users who register for and attend events
