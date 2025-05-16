@@ -1,37 +1,89 @@
-# Important
+EventHub is a comprehensive event management platform that connects event organizers with attendees. Create, manage, and promote events while providing seamless registration and ticketing experiences.
+✨ Features
+🧑‍💼 For Organizers
 
-Issues of this repository are tracked on https://github.com/aspnetboilerplate/aspnetboilerplate. Please create your issues on https://github.com/aspnetboilerplate/aspnetboilerplate/issues.
+📝 Create and manage detailed event listings
+🎟️ Customize multiple ticket types (General, VIP, etc.)
+📊 Real-time analytics on registrations and attendance
+📤 Export attendee data for offline management
+📅 Google Calendar synchronization
+📣 Send automated notifications to attendees
 
-# Introduction
+👥 For Attendees
 
-This is a template to create **ASP.NET Core MVC / Angular** based startup projects for [ASP.NET Boilerplate](https://aspnetboilerplate.com/Pages/Documents). It has 2 different versions:
+🔍 Browse and discover upcoming events
+💳 Register and purchase tickets
+📱 Receive email/SMS notifications
+📆 Add events to personal calendar
+⭐ Submit post-event feedback
 
-1. [ASP.NET Core MVC & jQuery](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Core) (server rendered multi-page application).
-2. [ASP.NET Core & Angular](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Angular) (single page application).
- 
-User Interface is based on [AdminLTE theme](https://github.com/ColorlibHQ/AdminLTE).
- 
-# Download
+🏗️ Architecture
+Domain Model
+The platform is structured around these core entities:
 
-Create & download your project from https://aspnetboilerplate.com/Templates
+Event - Contains details about date, location, organizer, tickets, and attendees
+Organizer - Users who create and manage events
+Attendee - Users who register for and attend events
+Ticket - Defines access types, pricing, and availability for events
 
-# Screenshots
 
-#### Sample Dashboard Page
-![](_screenshots/module-zero-core-template-ui-home.png)
+Key Relationships
 
-#### User Creation Modal
-![](_screenshots/module-zero-core-template-ui-user-create-modal.png)
+Organizer ↔ Events: 1-to-Many
+Event ↔ Attendee: Many-to-Many
+Event ↔ Ticket: 1-to-Many
+Notification ↔ Event & Attendee: Many-to-One
 
-#### Login Page
+🚀 Getting Started
+Prerequisites
 
-![](_screenshots/module-zero-core-template-ui-login.png)
+NextJs
+Abp Boilerplate
+Docker 
 
-# Documentation
+Installation
+bash# Clone the repository
+git clone https://github.com/yourusername/eventsphere.git
 
-* [ASP.NET Core MVC & jQuery version.](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Core)
-* [ASP.NET Core & Angular  version.](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Angular)
+# Navigate to project directory
+cd eventsphere
 
-# License
+# Install dependencies
+npm install
 
-[MIT](LICENSE).
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run database migrations
+npm run migrate
+
+# Start the development server
+npm run dev
+🛣️ Roadmap
+PhaseFocus AreaStatus1Event creation, attendee RSVP, organizer dashboard🟡 In Progress2Ticket management & payment integration🔜 Planned3Calendar sync, real-time analytics, notifications🔜 Planned4Documentation, multi-device testing🔜 Planned
+🧪 Testing
+bash# Run test suite
+npm test
+
+# Run with coverage report
+npm run test:coverage
+🔧 Tech Stack
+
+Frontend: NextJs
+Backend: Abp Boilerplate
+Database: SQL Server
+Authentication: JWT
+Payment Processing: PayFast
+
+Deployment: Docker, Render/Supabase
+
+📚 Documentation
+
+Setup Guide for Organizers
+User Manual for Attendees
+API Documentation
+Contributing Guidelines
+
+👨‍💻 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
