@@ -28,6 +28,8 @@ Organizer - Users who create and manage events
 Attendee - Users who register for and attend events
 Ticket - Defines access types, pricing, and availability for events
 
+**Designs**
+https://lucid.app/lucidchart/78118882-bfea-4eff-bd49-f792941d1a5a/edit?page=0_0&invitationId=inv_def19bee-ba7d-44ec-9069-296c3557e073#
 
 **Key Relationships**
 
@@ -39,6 +41,7 @@ Notification ↔ Event & Attendee: Many-to-One
 🚀 Project Structure
 
 EventHub/
+
 ├── aspnet-core/        
 └── eventhub/   
 
@@ -51,7 +54,7 @@ bash# Clone the repository
 (https://github.com/Motseki-Shabba/EventHub.git)
 
 # Navigate to project directory
-cd eventsphere
+cd EventHub
 
 # Install dependencies
 npm install
