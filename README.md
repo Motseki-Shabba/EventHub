@@ -31,6 +31,9 @@ Ticket - Defines access types, pricing, and availability for events
 **Designs**
 https://lucid.app/lucidchart/78118882-bfea-4eff-bd49-f792941d1a5a/edit?page=0_0&invitationId=inv_def19bee-ba7d-44ec-9069-296c3557e073#
 
+**Access Link**
+https://event-hub-s9mk.vercel.app
+
 **Key Relationships**
 
 Organizer ↔ Events: 1-to-Many
