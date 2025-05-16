@@ -38,6 +38,14 @@ https://lucid.app/lucidchart/78118882-bfea-4eff-bd49-f792941d1a5a/edit?page=0_0&
 **Access Link**
 https://event-hub-s9mk.vercel.app
 
+**Login Credentials**
+Attendee Username: Shabba
+Password: 123456789@Test
+
+Organizer Username: Lihlumise
+Password: 123456789@Test
+
+
 **Key Relationships**
 
 Organizer ↔ Events: 1-to-Many
