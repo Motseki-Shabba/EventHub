@@ -1,5 +1,7 @@
-EventHub is a comprehensive event management platform that connects event organizers with attendees. Create, manage, and promote events while providing seamless registration and ticketing experiences.
-✨ Features
+**EventHub** 
+is a comprehensive event management platform that connects event organizers with attendees. Create, manage, and promote events while providing seamless registration and ticketing experiences.
+
+**✨ Features**
 🧑‍💼 For Organizers
 
 📝 Create and manage detailed event listings
@@ -9,7 +11,7 @@ EventHub is a comprehensive event management platform that connects event organi
 📅 Google Calendar synchronization
 📣 Send automated notifications to attendees
 
-👥 For Attendees
+**👥 For Attendees**
 
 🔍 Browse and discover upcoming events
 💳 Register and purchase tickets
@@ -17,7 +19,7 @@ EventHub is a comprehensive event management platform that connects event organi
 📆 Add events to personal calendar
 ⭐ Submit post-event feedback
 
-🏗️ Architecture
+**🏗️ Architecture**
 Domain Model
 The platform is structured around these core entities:
 
@@ -27,7 +29,7 @@ Attendee - Users who register for and attend events
 Ticket - Defines access types, pricing, and availability for events
 
 
-Key Relationships
+**Key Relationships**
 
 Organizer ↔ Events: 1-to-Many
 Event ↔ Attendee: Many-to-Many
@@ -41,7 +43,7 @@ NextJs
 Abp Boilerplate
 Docker 
 
-Installation
+**Installation**
 bash# Clone the repository
 git clone https://github.com/yourusername/eventsphere.git
 
