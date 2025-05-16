@@ -1,7 +1,10 @@
 **EventHub** 
+
 is a comprehensive event management platform that connects event organizers with attendees. Create, manage, and promote events while providing seamless registration and ticketing experiences.
 
 **✨ Features**
+
+
 🧑‍💼 For Organizers
 
 📝 Create and manage detailed event listings
@@ -33,12 +36,18 @@ Attendee - Users who register for and attend events
 Ticket - Defines access types, pricing, and availability for events
 
 **Designs**
+
+
 https://lucid.app/lucidchart/78118882-bfea-4eff-bd49-f792941d1a5a/edit?page=0_0&invitationId=inv_def19bee-ba7d-44ec-9069-296c3557e073#
 
 **Access Link**
+
+
 https://event-hub-s9mk.vercel.app
 
 **Login Credentials**
+
+
 Attendee Username: Shabba
 Password: 123456789@Test
 
@@ -53,7 +62,7 @@ Event ↔ Attendee: Many-to-Many
 Event ↔ Ticket: 1-to-Many
 Notification ↔ Event & Attendee: Many-to-One
 
-🚀 Project Structure
+**🚀 Project Structure**
 
 EventHub/
 
