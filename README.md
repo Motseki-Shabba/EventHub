@@ -36,8 +36,11 @@ Event ↔ Attendee: Many-to-Many
 Event ↔ Ticket: 1-to-Many
 Notification ↔ Event & Attendee: Many-to-One
 
-🚀 Getting Started
-Prerequisites
+🚀 Project Structure
+
+EventHub/
+├── aspnet-core/        
+└── eventhub/   
 
 NextJs
 Abp Boilerplate
