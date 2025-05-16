@@ -64,7 +64,6 @@ npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your configuration
 
 # Run database migrations
 npm run migrate
