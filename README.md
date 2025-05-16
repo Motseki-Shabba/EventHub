@@ -45,7 +45,7 @@ Docker
 
 **Installation**
 bash# Clone the repository
-git clone https://github.com/yourusername/eventsphere.git
+[git clone https://github.com/yourusername/eventsphere.git](https://github.com/Motseki-Shabba/EventHub.git)
 
 # Navigate to project directory
 cd eventsphere
